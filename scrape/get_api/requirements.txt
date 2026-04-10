@@ -1,0 +1,6 @@
+requests>=2.31.0
+
+# HTML to Markdown (same as feed)
+beautifulsoup4>=4.12.0
+lxml>=4.9.0
+markdownify>=0.11.6

@@ -1,0 +1,622 @@
+[
+    {
+        "id": 6261,
+        "date": "2022-06-25T01:00:54",
+        "date_gmt": "2022-06-25T01:00:54",
+        "guid": {
+            "rendered": "https://www.fluentcpp.com/?p=6261"
+        },
+        "modified": "2020-11-18T09:54:21",
+        "modified_gmt": "2020-11-18T09:54:21",
+        "slug": "usage-first-implementation-after-a-principle-of-software-development",
+        "status": "publish",
+        "type": "post",
+        "link": "https://www.fluentcpp.com/2022/06/25/usage-first-implementation-after-a-principle-of-software-development/",
+        "title": {
+            "rendered": "Usage First, Implementation After: A Principle of Software Development"
+        },
+        "content": {
+            "rendered": "<p>You know when you work on various projects, and you use various tricks and techniques, and they all seem independent from one another, until the big picture jumps at you and you realize it&#8217;s all connected?</p>\n<p>I experienced this kind of aha moment, that emerged from several (apparently) independent topics I wrote about, a guest post from Miguel Raggi, and my work on three different recent projects. And I wanted to share this moment with you.</p>\n<p>The common point between those sources is this: if throughout your development process, you think about Usage First, Implementation After, you will maximize your chances for:</p>\n<ul>\n<li>happy users,</li>\n<li>expressive code,</li>\n<li>faster development time.</li>\n</ul>\n<p>The interesting thing is that &#8220;usage&#8221; and &#8220;implementation&#8221; have various meanings depending on the different stages in the development process. Let&#8217;s see 3 contexts where applying Usage First, Implementation After can bring the three above benefits.</p>\n<h3><span style=\"color: #ff6600;\">The usage of the user</span></h3>\n<p>When thinking about usage, the first thing that comes to mind is how the user is using the application.</p>\n<p>In this case, the principle of Usage First, Implementation After translates into the following guideline: decide about what&#8217;s best for the experience of the user, without thinking about how to implement the change in the application to achieve this user experience.</p>\n<p>Granted, at the end of the day you will have to implement some features in the application to make this user experience tangible. But if you don&#8217;t think about the implementation during the reflexion about what would be great for the user, you are freeing your thinking from any limits. <strong>Pretend that anything is possible!</strong> This leaves room for more awesome ideas.</p>\n<p>Only when you&#8217;ve decided what you want to do for the user, find a way to make it happen with the application. It&#8217;s only at this time that you should take into account the constraints of the existing system, the costs, etc. If necessary, you can always trade off 20% of user experience at this stage to make the development 80% cheaper.</p>\n<h3><span style=\"color: #ff6600;\">The usage of the developer</span></h3>\n<p>Another usage that we think less about is the usage of the developer.</p>\n<p>We don&#8217;t think about that first because the developer doesn&#8217;t use the app, and at first glance they don&#8217;t use the code either, they <em>produce</em> the code.</p>\n<p>This view stands if the code is one atomic chunk that makes the application run, but it is not the case. The code is made of parts, many parts, and at many scales.</p>\n<p>For example, the code of an application is often split into client and server, or front-end and back-end. And within any of those parts, there are modules, that can be composed of several sub-parts. And each piece of code in them is broken down into classes and functions, and so on.</p>\n<p>All those are under the control of developers, and at each scale, there are usages: the client uses the services provided by the server, the front-end uses the API of the back-end, the modules uses one another, the internal code of the module uses the public interfaces of the classes, the functions use the prototypes of other functions.</p>\n<p>All this is to illustrate that, from the perspective of any part of the code, there is a <em>usage</em> of another part of the code.</p>\n<h4><span style=\"color: #ff6600;\">Write the call site first</span></h4>\n<p>The principle of Usage First, Implementation After applies very well in this context. In practice, it consists in <strong>writing the call site first</strong>.</p>\n<p>Take the example of designing a function: imagine yourself in the middle of writing a piece of code, and you need an intermediary result in order to move on with the writing of your algorithm. You decide to write a function in charge of producing this intermediary result.</p>\n<p>One  way to design that sub-function is to think about what it will need and what it will produce, and then write the function. And once the function is written, to call it from the piece of code you were writing initially.</p>\n<p>But a better way to go is the other way around: pretend the sub-function already exists, and call it. This leaves you all the liberty to write the call site that suits you best, including a name for the function that fits seamlessly in that context.</p>\n<p>This is a very powerful technique to write expressive code.</p>\n<p>For more details and a step by step example of this approach of writing code, have a look at this excellent article from Miguel Raggi: <a href=\"https://www.fluentcpp.com/2018/09/11/how-to-write-simple-code-to-accomplish-complex-tasks/\">How to Write Simple Code to Accomplish Complex Tasks</a>.</p>\n<h3><span style=\"color: #ff6600;\">The usage of the data</span></h3>\n<p>Another situation I found the principle of User First, Implementation Later come in handy is when you have a system where you input data, and that produces data in another form. In this case the principle makes the development process faster.</p>\n<h4><span style=\"color: #ff6600;\">Renting boats</span></h4>\n<p>Let&#8217;s take an example to illustrate. Imagine you own a boat rental on the beautiful Lac d&#8217;Annecy, where tourists are pressing in the summer season. You rent boats to people for them to take a tour on the Lac, and you want people to be able to book their boat in advance on your website.</p>\n<p>The busy days are on the weekends and national holidays, although there is some activity during weekdays in the summer too. The inputs you feed your system are:</p>\n<ul>\n<li>the specific times your rental is open, for each type of day (weekend, weekday, summer season, etc.),</li>\n<li>the available boats and their hourly prices.</li>\n</ul>\n<p>People can then book a specific boat for any amount of time, ranging from 30 minutes to a full day.</p>\n<p>All that is the data coming in your system. In output, you need an up-to-date view of the available boats on the available slots for each day, so that potential customers can see what&#8217;s available in order to book their boat.</p>\n<h4><span style=\"color: #ff6600;\">Designing the system</span></h4>\n<p>There are at least two ways to design this system:</p>\n<ul>\n<li>in order following the workflow,</li>\n<li>or Usage First, Implementation later.</li>\n</ul>\n<p>The natural order that would come up to (my) mind is to follow the workflow. The starting point is the data provided by the boat rental owner: the opening times and boats descriptions. It sound only logical to start by thinking about how to take the data in input and how to store it, keeping in mind it will be queried later to display available boats and slots.</p>\n<p>I have found that a much faster way is to start designing the end of the system first: <strong>the Usage of the data</strong>.</p>\n<p>Doing that consists in designing the querying and processing of the data as if the data was already present in database in the most convenient format. The nice thing is that <em>this</em> defines what the most convenient format is.</p>\n<p>From there, we go back to the beginning of the process, to design how to store the input data in this convenient format.</p>\n<p>I used this approach on a project I worked on recently (even though it wasn&#8217;t about boats on the Lac d&#8217;Annecy) and I was impressed how it resulted in a better design, and a much faster development time.</p>\n<h3><span style=\"color: #ff6600;\">How you design software</span></h3>\n<p>We&#8217;ve seen three aspects of software development where the Usage First, Implementation Later principle brought expressive code, fast development and happy users.</p>\n<p>Do you also follow this principle or something resembling it? Please let me know how in a comment below, I&#8217;d love to read about your experience.</p>\n<p>What others principles do you use when designing software?</p>\n<h3>You will also like</h3>\n<ul>\n<li><a href=\"https://www.fluentcpp.com/2016/12/15/respect-levels-of-abstraction/\">It all comes down to respecting levels of abstraction</a></li>\n<li><a href=\"https://www.fluentcpp.com/2018/11/23/function-parameters-making-interfaces-easy-to-use/\">How to Design Function Parameters That Make Interfaces Easier to Use</a></li>\n<li><a href=\"https://www.fluentcpp.com/2020/06/19/great-developers-dont-just-write-great-code/\">Great Developers Don&#8217;t Just Write Great Code</a></li>\n<li><a href=\"https://www.fluentcpp.com/2020/05/15/runtime-polymorphism-without-virtual-functions/\">Runtime Polymorphism Without Objects or Virtual Functions</a></li>\n</ul>\nDon't want to miss out ? <strong>Follow:</strong> &nbsp&nbsp<a class=\"synved-social-button synved-social-button-follow synved-social-size-48 synved-social-resolution-single synved-social-provider-twitter nolightbox\" data-provider=\"twitter\" target=\"_blank\" rel=\"nofollow\" title=\"Follow me on twitter\" href=\"https://twitter.com/joboccara\" style=\"font-size: 0px;width:48px;height:48px;margin:0;margin-bottom:5px;margin-right:5px\"><img data-recalc-dims=\"1\" loading=\"lazy\" decoding=\"async\" alt=\"twitter\" title=\"Follow me on twitter\" class=\"synved-share-image synved-social-image synved-social-image-follow\" width=\"48\" height=\"48\" style=\"display: inline;width:48px;height:48px;margin: 0;padding: 0;border: none;box-shadow: none\" src=\"https://i0.wp.com/www.fluentcpp.com/wp-content/plugins/social-media-feather/synved-social/image/social/regular/96x96/twitter.png?resize=48%2C48&#038;ssl=1\" /></a><a class=\"synved-social-button synved-social-button-follow synved-social-size-48 synved-social-resolution-single synved-social-provider-linkedin nolightbox\" data-provider=\"linkedin\" target=\"_blank\" rel=\"nofollow\" title=\"Find us on Linkedin\" href=\"https://www.linkedin.com/in/jonathan-boccara-23826921/\" style=\"font-size: 0px;width:48px;height:48px;margin:0;margin-bottom:5px;margin-right:5px\"><img data-recalc-dims=\"1\" loading=\"lazy\" decoding=\"async\" alt=\"linkedin\" title=\"Find us on Linkedin\" class=\"synved-share-image synved-social-image synved-social-image-follow\" width=\"48\" height=\"48\" style=\"display: inline;width:48px;height:48px;margin: 0;padding: 0;border: none;box-shadow: none\" src=\"https://i0.wp.com/www.fluentcpp.com/wp-content/plugins/social-media-feather/synved-social/image/social/regular/96x96/linkedin.png?resize=48%2C48&#038;ssl=1\" /></a><a class=\"synved-social-button synved-social-button-follow synved-social-size-48 synved-social-resolution-single synved-social-provider-rss nolightbox\" data-provider=\"rss\" target=\"_blank\" rel=\"nofollow\" title=\"Subscribe to our RSS Feed\" href=\"https://www.fluentcpp.com/feed/\" style=\"font-size: 0px;width:48px;height:48px;margin:0;margin-bottom:5px\"><img data-recalc-dims=\"1\" loading=\"lazy\" decoding=\"async\" alt=\"rss\" title=\"Subscribe to our RSS Feed\" class=\"synved-share-image synved-social-image synved-social-image-follow\" width=\"48\" height=\"48\" style=\"display: inline;width:48px;height:48px;margin: 0;padding: 0;border: none;box-shadow: none\" src=\"https://i0.wp.com/www.fluentcpp.com/wp-content/plugins/social-media-feather/synved-social/image/social/regular/96x96/rss.png?resize=48%2C48&#038;ssl=1\" /></a><br/>Share this post!<a class=\"synved-social-button synved-social-button-share synved-social-size-48 synved-social-resolution-single synved-social-provider-facebook nolightbox\" data-provider=\"facebook\" target=\"_blank\" rel=\"nofollow\" title=\"Check out this post from Fluent C++\" href=\"https://www.facebook.com/sharer.php?u=https%3A%2F%2Fwww.fluentcpp.com%2Fwp-json%2Fwp%2Fv2%2Fposts%3Fper_page%3D2%26page%3D1&#038;t=Usage%20First%2C%20Implementation%20After%3A%20A%20Principle%20of%20Software%20Development&#038;s=100&#038;p&#091;url&#093;=https%3A%2F%2Fwww.fluentcpp.com%2Fwp-json%2Fwp%2Fv2%2Fposts%3Fper_page%3D2%26page%3D1&#038;p&#091;images&#093;&#091;0&#093;=&#038;p&#091;title&#093;=Usage%20First%2C%20Implementation%20After%3A%20A%20Principle%20of%20Software%20Development\" style=\"font-size: 0px;width:48px;height:48px;margin:0;margin-bottom:5px;margin-right:5px\"><img data-recalc-dims=\"1\" loading=\"lazy\" decoding=\"async\" alt=\"Facebook\" title=\"Check out this post from Fluent C++\" class=\"synved-share-image synved-social-image synved-social-image-share\" width=\"48\" height=\"48\" style=\"display: inline;width:48px;height:48px;margin: 0;padding: 0;border: none;box-shadow: none\" src=\"https://i0.wp.com/www.fluentcpp.com/wp-content/plugins/social-media-feather/synved-social/image/social/regular/96x96/facebook.png?resize=48%2C48&#038;ssl=1\" /></a><a class=\"synved-social-button synved-social-button-share synved-social-size-48 synved-social-resolution-single synved-social-provider-twitter nolightbox\" data-provider=\"twitter\" target=\"_blank\" rel=\"nofollow\" title=\"Tweet about this\" href=\"https://twitter.com/intent/tweet?url=https%3A%2F%2Fwww.fluentcpp.com%2Fwp-json%2Fwp%2Fv2%2Fposts%3Fper_page%3D2%26page%3D1&#038;text=Check%20out%20this%20post%20from%20Fluent%20C%2B%2B\" style=\"font-size: 0px;width:48px;height:48px;margin:0;margin-bottom:5px;margin-right:5px\"><img data-recalc-dims=\"1\" loading=\"lazy\" decoding=\"async\" alt=\"twitter\" title=\"Tweet about this\" class=\"synved-share-image synved-social-image synved-social-image-share\" width=\"48\" height=\"48\" style=\"display: inline;width:48px;height:48px;margin: 0;padding: 0;border: none;box-shadow: none\" src=\"https://i0.wp.com/www.fluentcpp.com/wp-content/plugins/social-media-feather/synved-social/image/social/regular/96x96/twitter.png?resize=48%2C48&#038;ssl=1\" /></a><a class=\"synved-social-button synved-social-button-share synved-social-size-48 synved-social-resolution-single synved-social-provider-linkedin nolightbox\" data-provider=\"linkedin\" target=\"_blank\" rel=\"nofollow\" title=\"Share on Linkedin\" href=\"https://www.linkedin.com/shareArticle?mini=true&#038;url=https%3A%2F%2Fwww.fluentcpp.com%2Fwp-json%2Fwp%2Fv2%2Fposts%3Fper_page%3D2%26page%3D1&#038;title=Usage%20First%2C%20Implementation%20After%3A%20A%20Principle%20of%20Software%20Development\" style=\"font-size: 0px;width:48px;height:48px;margin:0;margin-bottom:5px\"><img data-recalc-dims=\"1\" loading=\"lazy\" decoding=\"async\" alt=\"linkedin\" title=\"Share on Linkedin\" class=\"synved-share-image synved-social-image synved-social-image-share\" width=\"48\" height=\"48\" style=\"display: inline;width:48px;height:48px;margin: 0;padding: 0;border: none;box-shadow: none\" src=\"https://i0.wp.com/www.fluentcpp.com/wp-content/plugins/social-media-feather/synved-social/image/social/regular/96x96/linkedin.png?resize=48%2C48&#038;ssl=1\" /></a>",
+            "protected": false
+        },
+        "excerpt": {
+            "rendered": "<p>You know when you work on various projects, and you use various tricks and techniques, and they all seem independent from one another, until the big picture jumps at you and you realize it&#8217;s all connected? I experienced this kind of aha moment, that emerged from several (apparently) independent topics I wrote about, a guest [&hellip;]</p>\n",
+            "protected": false
+        },
+        "author": 1,
+        "featured_media": 0,
+        "comment_status": "open",
+        "ping_status": "open",
+        "sticky": false,
+        "template": "",
+        "format": "standard",
+        "meta": {
+            "nf_dc_page": "",
+            "_monsterinsights_skip_tracking": false,
+            "_monsterinsights_sitenote_active": false,
+            "_monsterinsights_sitenote_note": "",
+            "_monsterinsights_sitenote_category": 0,
+            "_jetpack_memberships_contains_paid_content": false,
+            "footnotes": ""
+        },
+        "categories": [
+            3
+        ],
+        "tags": [
+            22,
+            16,
+            706,
+            88,
+            912,
+            911
+        ],
+        "class_list": [
+            "post-6261",
+            "post",
+            "type-post",
+            "status-publish",
+            "format-standard",
+            "hentry",
+            "category-expressive-code",
+            "tag-design",
+            "tag-expressive",
+            "tag-principle",
+            "tag-software",
+            "tag-usage-first",
+            "tag-user-first"
+        ],
+        "yoast_head": "<!-- This site is optimized with the Yoast SEO plugin v26.8 - https://yoast.com/product/yoast-seo-wordpress/ -->\n<title>Usage First, Implementation After: A Principle of Software Development - Fluent C++</title>\n<meta name=\"description\" content=\"The Usage First, Implementation After is a software development principle you can use to make code expressive, projects fast and users happy.\" />\n<meta name=\"robots\" content=\"index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1\" />\n<link rel=\"canonical\" href=\"https://www.fluentcpp.com/2022/06/25/usage-first-implementation-after-a-principle-of-software-development/\" />\n<meta property=\"og:locale\" content=\"en_US\" />\n<meta property=\"og:type\" content=\"article\" />\n<meta property=\"og:title\" content=\"Usage First, Implementation After: A Principle of Software Development - Fluent C++\" />\n<meta property=\"og:description\" content=\"The Usage First, Implementation After is a software development principle you can use to make code expressive, projects fast and users happy.\" />\n<meta property=\"og:url\" content=\"https://www.fluentcpp.com/2022/06/25/usage-first-implementation-after-a-principle-of-software-development/\" />\n<meta property=\"og:site_name\" content=\"Fluent C++\" />\n<meta property=\"article:published_time\" content=\"2022-06-25T01:00:54+00:00\" />\n<meta name=\"author\" content=\"Jonathan Boccara\" />\n<meta name=\"twitter:card\" content=\"summary_large_image\" />\n<meta name=\"twitter:creator\" content=\"@joboccara\" />\n<meta name=\"twitter:site\" content=\"@JoBoccara\" />\n<meta name=\"twitter:label1\" content=\"Written by\" />\n\t<meta name=\"twitter:data1\" content=\"Jonathan Boccara\" />\n\t<meta name=\"twitter:label2\" content=\"Est. reading time\" />\n\t<meta name=\"twitter:data2\" content=\"6 minutes\" />\n<script type=\"application/ld+json\" class=\"yoast-schema-graph\">{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"Article\",\"@id\":\"https://www.fluentcpp.com/2022/06/25/usage-first-implementation-after-a-principle-of-software-development/#article\",\"isPartOf\":{\"@id\":\"https://www.fluentcpp.com/2022/06/25/usage-first-implementation-after-a-principle-of-software-development/\"},\"author\":{\"name\":\"Jonathan Boccara\",\"@id\":\"https://www.fluentcpp.com/#/schema/person/bc2586443e40d356676d1b1740521237\"},\"headline\":\"Usage First, Implementation After: A Principle of Software Development\",\"datePublished\":\"2022-06-25T01:00:54+00:00\",\"mainEntityOfPage\":{\"@id\":\"https://www.fluentcpp.com/2022/06/25/usage-first-implementation-after-a-principle-of-software-development/\"},\"wordCount\":1305,\"commentCount\":0,\"keywords\":[\"design\",\"expressive\",\"principle\",\"software\",\"usage first\",\"user first\"],\"articleSection\":[\"Expressive code\"],\"inLanguage\":\"en-US\",\"potentialAction\":[{\"@type\":\"CommentAction\",\"name\":\"Comment\",\"target\":[\"https://www.fluentcpp.com/2022/06/25/usage-first-implementation-after-a-principle-of-software-development/#respond\"]}]},{\"@type\":\"WebPage\",\"@id\":\"https://www.fluentcpp.com/2022/06/25/usage-first-implementation-after-a-principle-of-software-development/\",\"url\":\"https://www.fluentcpp.com/2022/06/25/usage-first-implementation-after-a-principle-of-software-development/\",\"name\":\"Usage First, Implementation After: A Principle of Software Development - Fluent C++\",\"isPartOf\":{\"@id\":\"https://www.fluentcpp.com/#website\"},\"datePublished\":\"2022-06-25T01:00:54+00:00\",\"author\":{\"@id\":\"https://www.fluentcpp.com/#/schema/person/bc2586443e40d356676d1b1740521237\"},\"description\":\"The Usage First, Implementation After is a software development principle you can use to make code expressive, projects fast and users happy.\",\"breadcrumb\":{\"@id\":\"https://www.fluentcpp.com/2022/06/25/usage-first-implementation-after-a-principle-of-software-development/#breadcrumb\"},\"inLanguage\":\"en-US\",\"potentialAction\":[{\"@type\":\"ReadAction\",\"target\":[\"https://www.fluentcpp.com/2022/06/25/usage-first-implementation-after-a-principle-of-software-development/\"]}]},{\"@type\":\"BreadcrumbList\",\"@id\":\"https://www.fluentcpp.com/2022/06/25/usage-first-implementation-after-a-principle-of-software-development/#breadcrumb\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Home\",\"item\":\"https://www.fluentcpp.com/\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Usage First, Implementation After: A Principle of Software Development\"}]},{\"@type\":\"WebSite\",\"@id\":\"https://www.fluentcpp.com/#website\",\"url\":\"https://www.fluentcpp.com/\",\"name\":\"Fluent C++\",\"description\":\"Jonathan Boccara&#039;s blog\",\"potentialAction\":[{\"@type\":\"SearchAction\",\"target\":{\"@type\":\"EntryPoint\",\"urlTemplate\":\"https://www.fluentcpp.com/?s={search_term_string}\"},\"query-input\":{\"@type\":\"PropertyValueSpecification\",\"valueRequired\":true,\"valueName\":\"search_term_string\"}}],\"inLanguage\":\"en-US\"},{\"@type\":\"Person\",\"@id\":\"https://www.fluentcpp.com/#/schema/person/bc2586443e40d356676d1b1740521237\",\"name\":\"Jonathan Boccara\",\"image\":{\"@type\":\"ImageObject\",\"inLanguage\":\"en-US\",\"@id\":\"https://www.fluentcpp.com/#/schema/person/image/\",\"url\":\"https://secure.gravatar.com/avatar/cf2136ea15306047a4aa549b5400deb87e750440abe9f5fab5ea5d8b47349d27?s=96&d=mm&r=g\",\"contentUrl\":\"https://secure.gravatar.com/avatar/cf2136ea15306047a4aa549b5400deb87e750440abe9f5fab5ea5d8b47349d27?s=96&d=mm&r=g\",\"caption\":\"Jonathan Boccara\"},\"description\":\"Hello, my name is Jonathan Boccara, I'm your host on Fluent C++. I have been a developer for 14 years. My focus is on how to write expressive code. I wrote the book The Legacy Code Programmer's Toolbox. I'm happy to take your feedback, don't hesitate to drop a comment on a post, follow me or get in touch directly !\",\"sameAs\":[\"https://www.linkedin.com/in/jonathan-boccara-23826921/\",\"https://x.com/joboccara\"]}]}</script>\n<!-- / Yoast SEO plugin. -->",
+        "yoast_head_json": {
+            "title": "Usage First, Implementation After: A Principle of Software Development - Fluent C++",
+            "description": "The Usage First, Implementation After is a software development principle you can use to make code expressive, projects fast and users happy.",
+            "robots": {
+                "index": "index",
+                "follow": "follow",
+                "max-snippet": "max-snippet:-1",
+                "max-image-preview": "max-image-preview:large",
+                "max-video-preview": "max-video-preview:-1"
+            },
+            "canonical": "https://www.fluentcpp.com/2022/06/25/usage-first-implementation-after-a-principle-of-software-development/",
+            "og_locale": "en_US",
+            "og_type": "article",
+            "og_title": "Usage First, Implementation After: A Principle of Software Development - Fluent C++",
+            "og_description": "The Usage First, Implementation After is a software development principle you can use to make code expressive, projects fast and users happy.",
+            "og_url": "https://www.fluentcpp.com/2022/06/25/usage-first-implementation-after-a-principle-of-software-development/",
+            "og_site_name": "Fluent C++",
+            "article_published_time": "2022-06-25T01:00:54+00:00",
+            "author": "Jonathan Boccara",
+            "twitter_card": "summary_large_image",
+            "twitter_creator": "@joboccara",
+            "twitter_site": "@JoBoccara",
+            "twitter_misc": {
+                "Written by": "Jonathan Boccara",
+                "Est. reading time": "6 minutes"
+            },
+            "schema": {
+                "@context": "https://schema.org",
+                "@graph": [
+                    {
+                        "@type": "Article",
+                        "@id": "https://www.fluentcpp.com/2022/06/25/usage-first-implementation-after-a-principle-of-software-development/#article",
+                        "isPartOf": {
+                            "@id": "https://www.fluentcpp.com/2022/06/25/usage-first-implementation-after-a-principle-of-software-development/"
+                        },
+                        "author": {
+                            "name": "Jonathan Boccara",
+                            "@id": "https://www.fluentcpp.com/#/schema/person/bc2586443e40d356676d1b1740521237"
+                        },
+                        "headline": "Usage First, Implementation After: A Principle of Software Development",
+                        "datePublished": "2022-06-25T01:00:54+00:00",
+                        "mainEntityOfPage": {
+                            "@id": "https://www.fluentcpp.com/2022/06/25/usage-first-implementation-after-a-principle-of-software-development/"
+                        },
+                        "wordCount": 1305,
+                        "commentCount": 0,
+                        "keywords": [
+                            "design",
+                            "expressive",
+                            "principle",
+                            "software",
+                            "usage first",
+                            "user first"
+                        ],
+                        "articleSection": [
+                            "Expressive code"
+                        ],
+                        "inLanguage": "en-US",
+                        "potentialAction": [
+                            {
+                                "@type": "CommentAction",
+                                "name": "Comment",
+                                "target": [
+                                    "https://www.fluentcpp.com/2022/06/25/usage-first-implementation-after-a-principle-of-software-development/#respond"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "@type": "WebPage",
+                        "@id": "https://www.fluentcpp.com/2022/06/25/usage-first-implementation-after-a-principle-of-software-development/",
+                        "url": "https://www.fluentcpp.com/2022/06/25/usage-first-implementation-after-a-principle-of-software-development/",
+                        "name": "Usage First, Implementation After: A Principle of Software Development - Fluent C++",
+                        "isPartOf": {
+                            "@id": "https://www.fluentcpp.com/#website"
+                        },
+                        "datePublished": "2022-06-25T01:00:54+00:00",
+                        "author": {
+                            "@id": "https://www.fluentcpp.com/#/schema/person/bc2586443e40d356676d1b1740521237"
+                        },
+                        "description": "The Usage First, Implementation After is a software development principle you can use to make code expressive, projects fast and users happy.",
+                        "breadcrumb": {
+                            "@id": "https://www.fluentcpp.com/2022/06/25/usage-first-implementation-after-a-principle-of-software-development/#breadcrumb"
+                        },
+                        "inLanguage": "en-US",
+                        "potentialAction": [
+                            {
+                                "@type": "ReadAction",
+                                "target": [
+                                    "https://www.fluentcpp.com/2022/06/25/usage-first-implementation-after-a-principle-of-software-development/"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "@type": "BreadcrumbList",
+                        "@id": "https://www.fluentcpp.com/2022/06/25/usage-first-implementation-after-a-principle-of-software-development/#breadcrumb",
+                        "itemListElement": [
+                            {
+                                "@type": "ListItem",
+                                "position": 1,
+                                "name": "Home",
+                                "item": "https://www.fluentcpp.com/"
+                            },
+                            {
+                                "@type": "ListItem",
+                                "position": 2,
+                                "name": "Usage First, Implementation After: A Principle of Software Development"
+                            }
+                        ]
+                    },
+                    {
+                        "@type": "WebSite",
+                        "@id": "https://www.fluentcpp.com/#website",
+                        "url": "https://www.fluentcpp.com/",
+                        "name": "Fluent C++",
+                        "description": "Jonathan Boccara&#039;s blog",
+                        "potentialAction": [
+                            {
+                                "@type": "SearchAction",
+                                "target": {
+                                    "@type": "EntryPoint",
+                                    "urlTemplate": "https://www.fluentcpp.com/?s={search_term_string}"
+                                },
+                                "query-input": {
+                                    "@type": "PropertyValueSpecification",
+                                    "valueRequired": true,
+                                    "valueName": "search_term_string"
+                                }
+                            }
+                        ],
+                        "inLanguage": "en-US"
+                    },
+                    {
+                        "@type": "Person",
+                        "@id": "https://www.fluentcpp.com/#/schema/person/bc2586443e40d356676d1b1740521237",
+                        "name": "Jonathan Boccara",
+                        "image": {
+                            "@type": "ImageObject",
+                            "inLanguage": "en-US",
+                            "@id": "https://www.fluentcpp.com/#/schema/person/image/",
+                            "url": "https://secure.gravatar.com/avatar/cf2136ea15306047a4aa549b5400deb87e750440abe9f5fab5ea5d8b47349d27?s=96&d=mm&r=g",
+                            "contentUrl": "https://secure.gravatar.com/avatar/cf2136ea15306047a4aa549b5400deb87e750440abe9f5fab5ea5d8b47349d27?s=96&d=mm&r=g",
+                            "caption": "Jonathan Boccara"
+                        },
+                        "description": "Hello, my name is Jonathan Boccara, I'm your host on Fluent C++. I have been a developer for 14 years. My focus is on how to write expressive code. I wrote the book The Legacy Code Programmer's Toolbox. I'm happy to take your feedback, don't hesitate to drop a comment on a post, follow me or get in touch directly !",
+                        "sameAs": [
+                            "https://www.linkedin.com/in/jonathan-boccara-23826921/",
+                            "https://x.com/joboccara"
+                        ]
+                    }
+                ]
+            }
+        },
+        "jetpack_featured_media_url": "",
+        "jetpack_sharing_enabled": true,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://www.fluentcpp.com/wp-json/wp/v2/posts/6261",
+                    "targetHints": {
+                        "allow": [
+                            "GET"
+                        ]
+                    }
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://www.fluentcpp.com/wp-json/wp/v2/posts"
+                }
+            ],
+            "about": [
+                {
+                    "href": "https://www.fluentcpp.com/wp-json/wp/v2/types/post"
+                }
+            ],
+            "author": [
+                {
+                    "embeddable": true,
+                    "href": "https://www.fluentcpp.com/wp-json/wp/v2/users/1"
+                }
+            ],
+            "replies": [
+                {
+                    "embeddable": true,
+                    "href": "https://www.fluentcpp.com/wp-json/wp/v2/comments?post=6261"
+                }
+            ],
+            "version-history": [
+                {
+                    "count": 5,
+                    "href": "https://www.fluentcpp.com/wp-json/wp/v2/posts/6261/revisions"
+                }
+            ],
+            "predecessor-version": [
+                {
+                    "id": 6273,
+                    "href": "https://www.fluentcpp.com/wp-json/wp/v2/posts/6261/revisions/6273"
+                }
+            ],
+            "wp:attachment": [
+                {
+                    "href": "https://www.fluentcpp.com/wp-json/wp/v2/media?parent=6261"
+                }
+            ],
+            "wp:term": [
+                {
+                    "taxonomy": "category",
+                    "embeddable": true,
+                    "href": "https://www.fluentcpp.com/wp-json/wp/v2/categories?post=6261"
+                },
+                {
+                    "taxonomy": "post_tag",
+                    "embeddable": true,
+                    "href": "https://www.fluentcpp.com/wp-json/wp/v2/tags?post=6261"
+                }
+            ],
+            "curies": [
+                {
+                    "name": "wp",
+                    "href": "https://api.w.org/{rel}",
+                    "templated": true
+                }
+            ]
+        }
+    },
+    {
+        "id": 5982,
+        "date": "2022-06-05T01:00:49",
+        "date_gmt": "2022-06-05T01:00:49",
+        "guid": {
+            "rendered": "https://www.fluentcpp.com/?p=5982"
+        },
+        "modified": "2020-11-18T10:22:20",
+        "modified_gmt": "2020-11-18T10:22:20",
+        "slug": "design-patterns-vs-design-principles-factory-method",
+        "status": "publish",
+        "type": "post",
+        "link": "https://www.fluentcpp.com/2022/06/05/design-patterns-vs-design-principles-factory-method/",
+        "title": {
+            "rendered": "Design Patterns VS Design Principles: Factory method"
+        },
+        "content": {
+            "rendered": "<p>Let&#8217;s examine another design pattern in our &#8220;Design Patterns VS Design Principles&#8221; series, where we relate design patterns to design principles. Today, we focus on the <strong>Factory method</strong> design pattern.</p>\n<p>We&#8217;ll see the various forms the Factory method design pattern can take, the differences with the Abstract Factory method, and to which design principle the Factory method pattern relates to.</p>\n<h3><span style=\"color: #ff6600;\">Design patterns and design principles</span></h3>\n<p>In case you&#8217;re just joining the series, let&#8217;s see what we call a design pattern and a design principle.</p>\n<p>A design pattern is one of the patterns presented in the classic Gang of Four (GoF) book <a href=\"https://www.amazon.com/gp/product/0201633612/ref=as_li_qf_asin_il_tl?ie=UTF8&amp;tag=fluentcpp-20&amp;creative=9325&amp;linkCode=as2&amp;creativeASIN=0201633612&amp;linkId=8d82c9d9fb2521a0d54f2f07c0bc12e0\">Design Patterns</a>:</p>\n<p><a href=\"https://www.amazon.com/gp/product/0201633612/ref=as_li_qf_asin_il_tl?ie=UTF8&amp;tag=fluentcpp-20&amp;creative=9325&amp;linkCode=as2&amp;creativeASIN=0201633612&amp;linkId=8d82c9d9fb2521a0d54f2f07c0bc12e0\"><img data-recalc-dims=\"1\" decoding=\"async\" loading=\"lazy\" class=\"aligncenter size-full wp-image-5042\" src=\"https://i0.wp.com/www.fluentcpp.com/wp-content/uploads/2019/05/design_patterns_book.jpg?resize=400%2C503&#038;ssl=1\" alt=\"design patterns book GoF\" width=\"400\" height=\"503\" srcset=\"https://i0.wp.com/www.fluentcpp.com/wp-content/uploads/2019/05/design_patterns_book.jpg?w=400&amp;ssl=1 400w, https://i0.wp.com/www.fluentcpp.com/wp-content/uploads/2019/05/design_patterns_book.jpg?resize=119%2C150&amp;ssl=1 119w, https://i0.wp.com/www.fluentcpp.com/wp-content/uploads/2019/05/design_patterns_book.jpg?resize=239%2C300&amp;ssl=1 239w, https://i0.wp.com/www.fluentcpp.com/wp-content/uploads/2019/05/design_patterns_book.jpg?resize=25%2C32&amp;ssl=1 25w, https://i0.wp.com/www.fluentcpp.com/wp-content/uploads/2019/05/design_patterns_book.jpg?resize=80%2C100&amp;ssl=1 80w, https://i0.wp.com/www.fluentcpp.com/wp-content/uploads/2019/05/design_patterns_book.jpg?resize=160%2C201&amp;ssl=1 160w, https://i0.wp.com/www.fluentcpp.com/wp-content/uploads/2019/05/design_patterns_book.jpg?resize=318%2C400&amp;ssl=1 318w, https://i0.wp.com/www.fluentcpp.com/wp-content/uploads/2019/05/design_patterns_book.jpg?resize=350%2C440&amp;ssl=1 350w\" sizes=\"auto, (max-width: 400px) 100vw, 400px\" /></a></p>\n<p>Design principles, on the other hand are more general guidelines to make design robust. The GRASP principles are 9 principles to assign responsibilities to components in code, and they are presented in Craig Larman&#8217;s <a href=\"https://www.amazon.com/gp/product/0131489062/ref=as_li_qf_asin_il_tl?ie=UTF8&amp;tag=fluentcpp-20&amp;creative=9325&amp;linkCode=as2&amp;creativeASIN=0131489062&amp;linkId=c8f9976423d1df2c59c9acd303a2ff14\">Applying UML and Patterns</a> book:</p>\n<p><a href=\"https://www.amazon.com/gp/product/0131489062/ref=as_li_qf_asin_il_tl?ie=UTF8&amp;tag=fluentcpp-20&amp;creative=9325&amp;linkCode=as2&amp;creativeASIN=0131489062&amp;linkId=c8f9976423d1df2c59c9acd303a2ff14\"><img data-recalc-dims=\"1\" decoding=\"async\" loading=\"lazy\" class=\"aligncenter size-full wp-image-4971\" src=\"https://i0.wp.com/www.fluentcpp.com/wp-content/uploads/2019/04/51gVLEtrCNL._SX398_BO1204203200_.jpg?resize=400%2C500&#038;ssl=1\" alt=\"Applying UML and Patterns\" width=\"400\" height=\"500\" srcset=\"https://i0.wp.com/www.fluentcpp.com/wp-content/uploads/2019/04/51gVLEtrCNL._SX398_BO1204203200_.jpg?w=400&amp;ssl=1 400w, https://i0.wp.com/www.fluentcpp.com/wp-content/uploads/2019/04/51gVLEtrCNL._SX398_BO1204203200_.jpg?resize=120%2C150&amp;ssl=1 120w, https://i0.wp.com/www.fluentcpp.com/wp-content/uploads/2019/04/51gVLEtrCNL._SX398_BO1204203200_.jpg?resize=240%2C300&amp;ssl=1 240w, https://i0.wp.com/www.fluentcpp.com/wp-content/uploads/2019/04/51gVLEtrCNL._SX398_BO1204203200_.jpg?resize=26%2C32&amp;ssl=1 26w, https://i0.wp.com/www.fluentcpp.com/wp-content/uploads/2019/04/51gVLEtrCNL._SX398_BO1204203200_.jpg?resize=80%2C100&amp;ssl=1 80w, https://i0.wp.com/www.fluentcpp.com/wp-content/uploads/2019/04/51gVLEtrCNL._SX398_BO1204203200_.jpg?resize=161%2C201&amp;ssl=1 161w, https://i0.wp.com/www.fluentcpp.com/wp-content/uploads/2019/04/51gVLEtrCNL._SX398_BO1204203200_.jpg?resize=320%2C400&amp;ssl=1 320w, https://i0.wp.com/www.fluentcpp.com/wp-content/uploads/2019/04/51gVLEtrCNL._SX398_BO1204203200_.jpg?resize=352%2C440&amp;ssl=1 352w\" sizes=\"auto, (max-width: 400px) 100vw, 400px\" /></a></p>\n<p>The <a href=\"https://www.fluentcpp.com/2021/06/23/grasp-9-must-know-design-principles-for-code/\">9 GRASP design principles</a> are:</p>\n<ul>\n<li>Low Coupling</li>\n<li>High cohesion</li>\n<li>Creator</li>\n<li>Information expert</li>\n<li>Polymorphism</li>\n<li>Indirection</li>\n<li>Protected Variations</li>\n<li>Pure Fabrication</li>\n<li>Controller</li>\n</ul>\n<p>Let&#8217;s analyse the GoF design pattern<strong> Factory method</strong>, and find out to which GRASP principle it relates most.</p>\n<h3><span style=\"color: #ff6600;\">Factory method</span></h3>\n<p>To understand what factory method means, let&#8217;s analyse each of its two words:</p>\n<ul>\n<li>method: this means member function,</li>\n<li>factory: this means something that creates objects.</li>\n</ul>\n<p>All this means that a factory method is a member function that creates objects.</p>\n<p>It is important to note that this comes from a book on object oriented design (the GoF&#8217;s <a href=\"https://www.amazon.com/gp/product/0201633612/ref=as_li_qf_asin_il_tl?ie=UTF8&amp;tag=fluentcpp-20&amp;creative=9325&amp;linkCode=as2&amp;creativeASIN=0201633612&amp;linkId=8d82c9d9fb2521a0d54f2f07c0bc12e0'\">Design Patterns</a> book) , that makes heavy use of member functions. But my understanding of the design pattern is that it applies beyond member functions. It applies to free functions too.</p>\n<p>So a more generic and idiomatic name for this design pattern in C++ could be &#8220;Factory function&#8221;.</p>\n<h4><span style=\"color: #ff6600;\">Factory member functions</span></h4>\n<p>The GoF book illustrates the Factory method pattern with a polymorphic member function that returns a polymorphic object. The example is (in essence and in more modern) something like this:</p>\n<pre class=\"lang:c++ decode:true \">class X { /* ... */ };\r\n\r\nclass SomeTypeOfX : public X { /* ... */ };\r\n\r\nclass MyClass\r\n{\r\npublic:\r\n    // interface of MyClass...\r\n    virtual std::unique_ptr&lt;X&gt; createX() const;\r\n};\r\n\r\nclass MyDerivedClass : public MyClass\r\n{\r\npublic:\r\n    std::unique_ptr&lt;X&gt; createX() const override\r\n    {\r\n        return std::make_unique&lt;SomeTypeOfX&gt;();\r\n    }\r\n};\r\n</pre>\n<p>The Factory method here is <code>createX</code>. Its only role is to create an <code>X</code> (or an object behaving like an <code>X</code>) and it is the only place in the code that creates an <code>X</code>.</p>\n<p>This example uses polymorphism in two places: the factory method is polymorphic, and the created object is polymorphic too. But I don&#8217;t think those are essential conditions for the design pattern. A non-polymorphic method could just as well be in charge of creating a non-polymorphic object too.</p>\n<p>For this reason, I don&#8217;t think that Factory method, in its essence, relates to the Polymorphism design principle. Rather, I would relate it to <strong>Pure Fabrication</strong>. Indeed, it is convenient for cohesion to centralise the responsibility of creating an object in one member function, even if this function doesn&#8217;t represent an element of the domain of the application.</p>\n<h4><span style=\"color: #ff6600;\">Factory free functions</span></h4>\n<p>To illustrate how Factory method can also be implemented with a free function, let&#8217;s see the common pattern of the factory function. Before learning design patterns, this is what I thought the generic name &#8220;factory&#8221; referred too.</p>\n<p>Consider the case where we have a class hierarchy:</p>\n<pre class=\"lang:c++ decode:true\">class Base { /* ... */ };\r\n\r\nclass Derived1 : public Base { /* ... */ };\r\n\r\nclass Derived2 : public Base { /* ... */ };\r\n\r\nclass Derived3 : public Base { /* ... */ };</pre>\n<p>And we only know at runtime the type of the object we need to create. This information is represented by an enum:</p>\n<pre class=\"lang:c++ decode:true\">enum class Type\r\n{\r\n    Type1,\r\n    Type2,\r\n    Type3\r\n};</pre>\n<p>(those are names to illustrate the concepts, in production code we wouldn&#8217;t use such names with no information!)</p>\n<p>To create an object of the appropriate type, and let the rest of the code use it polymorphically through the <code>Base</code> interface, we can centralise the creation in one function:</p>\n<pre class=\"lang:c++ decode:true \">std::unique_ptr&lt;Base&gt; createObject(Type type)\r\n{\r\n    switch (type)\r\n    {\r\n        case Type::Type1 :\r\n            return std::make_unique&lt;Derived1&gt;();\r\n        case Type::Type2 :\r\n            return std::make_unique&lt;Derived2&gt;();\r\n        case Type::Type3 :\r\n        default:\r\n            return std::make_unique&lt;Derived3&gt;();\r\n    }\r\n};</pre>\n<p>This falls under the Factory method design pattern too. And I would also relate this form to the <strong>Pure Fabrication</strong> principle, as it is a convenient way to centralise the responsibility of creating the object even if it doesn&#8217;t mirror a domain concept.</p>\n<h4><span style=\"color: #ff6600;\">Why not Creator?</span></h4>\n<p>It would have sounded nice to relate the Factory method design pattern to the Creator design principle. Indeed, the sole role of the Factory method pattern is to create object (we saw that it didn&#8217;t relate to the Polymorphism principle).</p>\n<p>However, the Creator principle is something else: it suggests that B should create A if B is going to interact with A, has input to create A, or is, more generally, close to A.</p>\n<p>The Factory method is not close to the object it creates, in my view. Once it created it, the factory doesn&#8217;t necessarily continue to interact with the object.</p>\n<h3><span style=\"color: #ff6600;\">The differences between Abstract Factory and Factory method</span></h3>\n<p>Abstract Factory and Factory method are two design patterns with the name &#8220;factory&#8221; in it, and they both describe patterns to create objects. The classical question is then: what is the difference between them?</p>\n<p>I won&#8217;t describe how Abstract Factory works because it is a topic in itself and it is out of the scope of this article (it you&#8217;re not sure about how Abstract Factory works, check out the <a href=\"https://www.fluentcpp.com/2022/04/06/design-patterns-vs-design-principles-abstract-factory/\">article dedicated to Abstract Factory</a>).</p>\n<p>Here are the differences I see between the two patterns:</p>\n<ul>\n<li>Abstract Factory creates several objects of the same family or brand, whereas Factory method only creates one.</li>\n<li>The essence of Abstract Factory is to provide Polymorphism in the creation of objects, whereas Factory method is only a Pure Fabrication to centralise the creation of an object.</li>\n</ul>\n<p>Do you see other differences between the two patterns?</p>\n<p>Do you agree with the attribution of Factory method to Pure Fabrication?</p>\n<p>Do you often use design patterns and design principles in your code?</p>\n<p>Leave a comment below.</p>\n<h3>You will also like</h3>\n<ul>\n<li><a href=\"https://www.fluentcpp.com/2022/04/06/design-patterns-vs-design-principles-abstract-factory/\">Design Patterns VS Design Principles: Abstract Factory</a></li>\n<li><a href=\"https://www.fluentcpp.com/2021/07/01/minor-major-and-overarching-design-principles/\">Minor, Major and Overarching Design Principles</a></li>\n<li><a href=\"https://www.fluentcpp.com/2021/06/23/grasp-9-must-know-design-principles-for-code/\">GRASP: 9 Must-Know Design Principles for Code</a></li>\n<li><a href=\"https://www.fluentcpp.com/2021/09/12/design-patterns-vs-design-principles-iterator-mediator-and-memento/\">Design Patterns VS Design Principles: Iterator, Mediator and Memento</a></li>\n<li><a href=\"https://www.fluentcpp.com/2021/11/17/design-patterns-vs-design-principles-template-method/\">Design Patterns VS Design Principles: Template Method</a></li>\n</ul>\nDon't want to miss out ? <strong>Follow:</strong> &nbsp&nbsp<a class=\"synved-social-button synved-social-button-follow synved-social-size-48 synved-social-resolution-single synved-social-provider-twitter nolightbox\" data-provider=\"twitter\" target=\"_blank\" rel=\"nofollow\" title=\"Follow me on twitter\" href=\"https://twitter.com/joboccara\" style=\"font-size: 0px;width:48px;height:48px;margin:0;margin-bottom:5px;margin-right:5px\"><img data-recalc-dims=\"1\" loading=\"lazy\" decoding=\"async\" alt=\"twitter\" title=\"Follow me on twitter\" class=\"synved-share-image synved-social-image synved-social-image-follow\" width=\"48\" height=\"48\" style=\"display: inline;width:48px;height:48px;margin: 0;padding: 0;border: none;box-shadow: none\" src=\"https://i0.wp.com/www.fluentcpp.com/wp-content/plugins/social-media-feather/synved-social/image/social/regular/96x96/twitter.png?resize=48%2C48&#038;ssl=1\" /></a><a class=\"synved-social-button synved-social-button-follow synved-social-size-48 synved-social-resolution-single synved-social-provider-linkedin nolightbox\" data-provider=\"linkedin\" target=\"_blank\" rel=\"nofollow\" title=\"Find us on Linkedin\" href=\"https://www.linkedin.com/in/jonathan-boccara-23826921/\" style=\"font-size: 0px;width:48px;height:48px;margin:0;margin-bottom:5px;margin-right:5px\"><img data-recalc-dims=\"1\" loading=\"lazy\" decoding=\"async\" alt=\"linkedin\" title=\"Find us on Linkedin\" class=\"synved-share-image synved-social-image synved-social-image-follow\" width=\"48\" height=\"48\" style=\"display: inline;width:48px;height:48px;margin: 0;padding: 0;border: none;box-shadow: none\" src=\"https://i0.wp.com/www.fluentcpp.com/wp-content/plugins/social-media-feather/synved-social/image/social/regular/96x96/linkedin.png?resize=48%2C48&#038;ssl=1\" /></a><a class=\"synved-social-button synved-social-button-follow synved-social-size-48 synved-social-resolution-single synved-social-provider-rss nolightbox\" data-provider=\"rss\" target=\"_blank\" rel=\"nofollow\" title=\"Subscribe to our RSS Feed\" href=\"https://www.fluentcpp.com/feed/\" style=\"font-size: 0px;width:48px;height:48px;margin:0;margin-bottom:5px\"><img data-recalc-dims=\"1\" loading=\"lazy\" decoding=\"async\" alt=\"rss\" title=\"Subscribe to our RSS Feed\" class=\"synved-share-image synved-social-image synved-social-image-follow\" width=\"48\" height=\"48\" style=\"display: inline;width:48px;height:48px;margin: 0;padding: 0;border: none;box-shadow: none\" src=\"https://i0.wp.com/www.fluentcpp.com/wp-content/plugins/social-media-feather/synved-social/image/social/regular/96x96/rss.png?resize=48%2C48&#038;ssl=1\" /></a><br/>Share this post!<a class=\"synved-social-button synved-social-button-share synved-social-size-48 synved-social-resolution-single synved-social-provider-facebook nolightbox\" data-provider=\"facebook\" target=\"_blank\" rel=\"nofollow\" title=\"Check out this post from Fluent C++\" href=\"https://www.facebook.com/sharer.php?u=https%3A%2F%2Fwww.fluentcpp.com%2Fwp-json%2Fwp%2Fv2%2Fposts%3Fper_page%3D2%26page%3D1&#038;t=Design%20Patterns%20VS%20Design%20Principles%3A%20Factory%20method&#038;s=100&#038;p&#091;url&#093;=https%3A%2F%2Fwww.fluentcpp.com%2Fwp-json%2Fwp%2Fv2%2Fposts%3Fper_page%3D2%26page%3D1&#038;p&#091;images&#093;&#091;0&#093;=https%3A%2F%2Fwww.fluentcpp.com%2Fwp-content%2Fuploads%2F2019%2F05%2Fdesign_patterns_book.jpg&#038;p&#091;title&#093;=Design%20Patterns%20VS%20Design%20Principles%3A%20Factory%20method\" style=\"font-size: 0px;width:48px;height:48px;margin:0;margin-bottom:5px;margin-right:5px\"><img data-recalc-dims=\"1\" loading=\"lazy\" decoding=\"async\" alt=\"Facebook\" title=\"Check out this post from Fluent C++\" class=\"synved-share-image synved-social-image synved-social-image-share\" width=\"48\" height=\"48\" style=\"display: inline;width:48px;height:48px;margin: 0;padding: 0;border: none;box-shadow: none\" src=\"https://i0.wp.com/www.fluentcpp.com/wp-content/plugins/social-media-feather/synved-social/image/social/regular/96x96/facebook.png?resize=48%2C48&#038;ssl=1\" /></a><a class=\"synved-social-button synved-social-button-share synved-social-size-48 synved-social-resolution-single synved-social-provider-twitter nolightbox\" data-provider=\"twitter\" target=\"_blank\" rel=\"nofollow\" title=\"Tweet about this\" href=\"https://twitter.com/intent/tweet?url=https%3A%2F%2Fwww.fluentcpp.com%2Fwp-json%2Fwp%2Fv2%2Fposts%3Fper_page%3D2%26page%3D1&#038;text=Check%20out%20this%20post%20from%20Fluent%20C%2B%2B\" style=\"font-size: 0px;width:48px;height:48px;margin:0;margin-bottom:5px;margin-right:5px\"><img data-recalc-dims=\"1\" loading=\"lazy\" decoding=\"async\" alt=\"twitter\" title=\"Tweet about this\" class=\"synved-share-image synved-social-image synved-social-image-share\" width=\"48\" height=\"48\" style=\"display: inline;width:48px;height:48px;margin: 0;padding: 0;border: none;box-shadow: none\" src=\"https://i0.wp.com/www.fluentcpp.com/wp-content/plugins/social-media-feather/synved-social/image/social/regular/96x96/twitter.png?resize=48%2C48&#038;ssl=1\" /></a><a class=\"synved-social-button synved-social-button-share synved-social-size-48 synved-social-resolution-single synved-social-provider-linkedin nolightbox\" data-provider=\"linkedin\" target=\"_blank\" rel=\"nofollow\" title=\"Share on Linkedin\" href=\"https://www.linkedin.com/shareArticle?mini=true&#038;url=https%3A%2F%2Fwww.fluentcpp.com%2Fwp-json%2Fwp%2Fv2%2Fposts%3Fper_page%3D2%26page%3D1&#038;title=Design%20Patterns%20VS%20Design%20Principles%3A%20Factory%20method\" style=\"font-size: 0px;width:48px;height:48px;margin:0;margin-bottom:5px\"><img data-recalc-dims=\"1\" loading=\"lazy\" decoding=\"async\" alt=\"linkedin\" title=\"Share on Linkedin\" class=\"synved-share-image synved-social-image synved-social-image-share\" width=\"48\" height=\"48\" style=\"display: inline;width:48px;height:48px;margin: 0;padding: 0;border: none;box-shadow: none\" src=\"https://i0.wp.com/www.fluentcpp.com/wp-content/plugins/social-media-feather/synved-social/image/social/regular/96x96/linkedin.png?resize=48%2C48&#038;ssl=1\" /></a>",
+            "protected": false
+        },
+        "excerpt": {
+            "rendered": "<p>Let&#8217;s examine another design pattern in our &#8220;Design Patterns VS Design Principles&#8221; series, where we relate design patterns to design principles. Today, we focus on the Factory method design pattern. We&#8217;ll see the various forms the Factory method design pattern can take, the differences with the Abstract Factory method, and to which design principle the [&hellip;]</p>\n",
+            "protected": false
+        },
+        "author": 1,
+        "featured_media": 0,
+        "comment_status": "open",
+        "ping_status": "open",
+        "sticky": false,
+        "template": "",
+        "format": "standard",
+        "meta": {
+            "nf_dc_page": "",
+            "_monsterinsights_skip_tracking": false,
+            "_monsterinsights_sitenote_active": false,
+            "_monsterinsights_sitenote_note": "",
+            "_monsterinsights_sitenote_category": 0,
+            "_jetpack_memberships_contains_paid_content": false,
+            "footnotes": ""
+        },
+        "categories": [
+            3
+        ],
+        "tags": [
+            10,
+            22,
+            711,
+            877,
+            876,
+            712,
+            698
+        ],
+        "class_list": [
+            "post-5982",
+            "post",
+            "type-post",
+            "status-publish",
+            "format-standard",
+            "hentry",
+            "category-expressive-code",
+            "tag-c",
+            "tag-design",
+            "tag-design-pattern",
+            "tag-factory",
+            "tag-factory-method",
+            "tag-gof",
+            "tag-grasp"
+        ],
+        "yoast_head": "<!-- This site is optimized with the Yoast SEO plugin v26.8 - https://yoast.com/product/yoast-seo-wordpress/ -->\n<title>Design Patterns VS Design Principles: Factory method - Fluent C++</title>\n<meta name=\"description\" content=\"In this episode of our series ond design patterns and design principles, we examine the Factory method design pattern and relate it to two design principles\" />\n<meta name=\"robots\" content=\"index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1\" />\n<link rel=\"canonical\" href=\"https://www.fluentcpp.com/2022/06/05/design-patterns-vs-design-principles-factory-method/\" />\n<meta property=\"og:locale\" content=\"en_US\" />\n<meta property=\"og:type\" content=\"article\" />\n<meta property=\"og:title\" content=\"Design Patterns VS Design Principles: Factory method - Fluent C++\" />\n<meta property=\"og:description\" content=\"In this episode of our series ond design patterns and design principles, we examine the Factory method design pattern and relate it to two design principles\" />\n<meta property=\"og:url\" content=\"https://www.fluentcpp.com/2022/06/05/design-patterns-vs-design-principles-factory-method/\" />\n<meta property=\"og:site_name\" content=\"Fluent C++\" />\n<meta property=\"article:published_time\" content=\"2022-06-05T01:00:49+00:00\" />\n<meta property=\"og:image\" content=\"https://www.fluentcpp.com/wp-content/uploads/2019/05/design_patterns_book.jpg\" />\n<meta name=\"author\" content=\"Jonathan Boccara\" />\n<meta name=\"twitter:card\" content=\"summary_large_image\" />\n<meta name=\"twitter:creator\" content=\"@joboccara\" />\n<meta name=\"twitter:site\" content=\"@JoBoccara\" />\n<meta name=\"twitter:label1\" content=\"Written by\" />\n\t<meta name=\"twitter:data1\" content=\"Jonathan Boccara\" />\n\t<meta name=\"twitter:label2\" content=\"Est. reading time\" />\n\t<meta name=\"twitter:data2\" content=\"5 minutes\" />\n<script type=\"application/ld+json\" class=\"yoast-schema-graph\">{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"Article\",\"@id\":\"https://www.fluentcpp.com/2022/06/05/design-patterns-vs-design-principles-factory-method/#article\",\"isPartOf\":{\"@id\":\"https://www.fluentcpp.com/2022/06/05/design-patterns-vs-design-principles-factory-method/\"},\"author\":{\"name\":\"Jonathan Boccara\",\"@id\":\"https://www.fluentcpp.com/#/schema/person/bc2586443e40d356676d1b1740521237\"},\"headline\":\"Design Patterns VS Design Principles: Factory method\",\"datePublished\":\"2022-06-05T01:00:49+00:00\",\"mainEntityOfPage\":{\"@id\":\"https://www.fluentcpp.com/2022/06/05/design-patterns-vs-design-principles-factory-method/\"},\"wordCount\":957,\"commentCount\":0,\"image\":{\"@id\":\"https://www.fluentcpp.com/2022/06/05/design-patterns-vs-design-principles-factory-method/#primaryimage\"},\"thumbnailUrl\":\"https://www.fluentcpp.com/wp-content/uploads/2019/05/design_patterns_book.jpg\",\"keywords\":[\"C++\",\"design\",\"design pattern\",\"factory\",\"factory method\",\"GoF\",\"grasp\"],\"articleSection\":[\"Expressive code\"],\"inLanguage\":\"en-US\",\"potentialAction\":[{\"@type\":\"CommentAction\",\"name\":\"Comment\",\"target\":[\"https://www.fluentcpp.com/2022/06/05/design-patterns-vs-design-principles-factory-method/#respond\"]}]},{\"@type\":\"WebPage\",\"@id\":\"https://www.fluentcpp.com/2022/06/05/design-patterns-vs-design-principles-factory-method/\",\"url\":\"https://www.fluentcpp.com/2022/06/05/design-patterns-vs-design-principles-factory-method/\",\"name\":\"Design Patterns VS Design Principles: Factory method - Fluent C++\",\"isPartOf\":{\"@id\":\"https://www.fluentcpp.com/#website\"},\"primaryImageOfPage\":{\"@id\":\"https://www.fluentcpp.com/2022/06/05/design-patterns-vs-design-principles-factory-method/#primaryimage\"},\"image\":{\"@id\":\"https://www.fluentcpp.com/2022/06/05/design-patterns-vs-design-principles-factory-method/#primaryimage\"},\"thumbnailUrl\":\"https://www.fluentcpp.com/wp-content/uploads/2019/05/design_patterns_book.jpg\",\"datePublished\":\"2022-06-05T01:00:49+00:00\",\"author\":{\"@id\":\"https://www.fluentcpp.com/#/schema/person/bc2586443e40d356676d1b1740521237\"},\"description\":\"In this episode of our series ond design patterns and design principles, we examine the Factory method design pattern and relate it to two design principles\",\"breadcrumb\":{\"@id\":\"https://www.fluentcpp.com/2022/06/05/design-patterns-vs-design-principles-factory-method/#breadcrumb\"},\"inLanguage\":\"en-US\",\"potentialAction\":[{\"@type\":\"ReadAction\",\"target\":[\"https://www.fluentcpp.com/2022/06/05/design-patterns-vs-design-principles-factory-method/\"]}]},{\"@type\":\"ImageObject\",\"inLanguage\":\"en-US\",\"@id\":\"https://www.fluentcpp.com/2022/06/05/design-patterns-vs-design-principles-factory-method/#primaryimage\",\"url\":\"https://i0.wp.com/www.fluentcpp.com/wp-content/uploads/2019/05/design_patterns_book.jpg?fit=400%2C503&ssl=1\",\"contentUrl\":\"https://i0.wp.com/www.fluentcpp.com/wp-content/uploads/2019/05/design_patterns_book.jpg?fit=400%2C503&ssl=1\",\"width\":400,\"height\":503,\"caption\":\"design patterns book GoF\"},{\"@type\":\"BreadcrumbList\",\"@id\":\"https://www.fluentcpp.com/2022/06/05/design-patterns-vs-design-principles-factory-method/#breadcrumb\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Home\",\"item\":\"https://www.fluentcpp.com/\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Design Patterns VS Design Principles: Factory method\"}]},{\"@type\":\"WebSite\",\"@id\":\"https://www.fluentcpp.com/#website\",\"url\":\"https://www.fluentcpp.com/\",\"name\":\"Fluent C++\",\"description\":\"Jonathan Boccara&#039;s blog\",\"potentialAction\":[{\"@type\":\"SearchAction\",\"target\":{\"@type\":\"EntryPoint\",\"urlTemplate\":\"https://www.fluentcpp.com/?s={search_term_string}\"},\"query-input\":{\"@type\":\"PropertyValueSpecification\",\"valueRequired\":true,\"valueName\":\"search_term_string\"}}],\"inLanguage\":\"en-US\"},{\"@type\":\"Person\",\"@id\":\"https://www.fluentcpp.com/#/schema/person/bc2586443e40d356676d1b1740521237\",\"name\":\"Jonathan Boccara\",\"image\":{\"@type\":\"ImageObject\",\"inLanguage\":\"en-US\",\"@id\":\"https://www.fluentcpp.com/#/schema/person/image/\",\"url\":\"https://secure.gravatar.com/avatar/cf2136ea15306047a4aa549b5400deb87e750440abe9f5fab5ea5d8b47349d27?s=96&d=mm&r=g\",\"contentUrl\":\"https://secure.gravatar.com/avatar/cf2136ea15306047a4aa549b5400deb87e750440abe9f5fab5ea5d8b47349d27?s=96&d=mm&r=g\",\"caption\":\"Jonathan Boccara\"},\"description\":\"Hello, my name is Jonathan Boccara, I'm your host on Fluent C++. I have been a developer for 14 years. My focus is on how to write expressive code. I wrote the book The Legacy Code Programmer's Toolbox. I'm happy to take your feedback, don't hesitate to drop a comment on a post, follow me or get in touch directly !\",\"sameAs\":[\"https://www.linkedin.com/in/jonathan-boccara-23826921/\",\"https://x.com/joboccara\"]}]}</script>\n<!-- / Yoast SEO plugin. -->",
+        "yoast_head_json": {
+            "title": "Design Patterns VS Design Principles: Factory method - Fluent C++",
+            "description": "In this episode of our series ond design patterns and design principles, we examine the Factory method design pattern and relate it to two design principles",
+            "robots": {
+                "index": "index",
+                "follow": "follow",
+                "max-snippet": "max-snippet:-1",
+                "max-image-preview": "max-image-preview:large",
+                "max-video-preview": "max-video-preview:-1"
+            },
+            "canonical": "https://www.fluentcpp.com/2022/06/05/design-patterns-vs-design-principles-factory-method/",
+            "og_locale": "en_US",
+            "og_type": "article",
+            "og_title": "Design Patterns VS Design Principles: Factory method - Fluent C++",
+            "og_description": "In this episode of our series ond design patterns and design principles, we examine the Factory method design pattern and relate it to two design principles",
+            "og_url": "https://www.fluentcpp.com/2022/06/05/design-patterns-vs-design-principles-factory-method/",
+            "og_site_name": "Fluent C++",
+            "article_published_time": "2022-06-05T01:00:49+00:00",
+            "og_image": [
+                {
+                    "url": "https://www.fluentcpp.com/wp-content/uploads/2019/05/design_patterns_book.jpg",
+                    "type": "",
+                    "width": "",
+                    "height": ""
+                }
+            ],
+            "author": "Jonathan Boccara",
+            "twitter_card": "summary_large_image",
+            "twitter_creator": "@joboccara",
+            "twitter_site": "@JoBoccara",
+            "twitter_misc": {
+                "Written by": "Jonathan Boccara",
+                "Est. reading time": "5 minutes"
+            },
+            "schema": {
+                "@context": "https://schema.org",
+                "@graph": [
+                    {
+                        "@type": "Article",
+                        "@id": "https://www.fluentcpp.com/2022/06/05/design-patterns-vs-design-principles-factory-method/#article",
+                        "isPartOf": {
+                            "@id": "https://www.fluentcpp.com/2022/06/05/design-patterns-vs-design-principles-factory-method/"
+                        },
+                        "author": {
+                            "name": "Jonathan Boccara",
+                            "@id": "https://www.fluentcpp.com/#/schema/person/bc2586443e40d356676d1b1740521237"
+                        },
+                        "headline": "Design Patterns VS Design Principles: Factory method",
+                        "datePublished": "2022-06-05T01:00:49+00:00",
+                        "mainEntityOfPage": {
+                            "@id": "https://www.fluentcpp.com/2022/06/05/design-patterns-vs-design-principles-factory-method/"
+                        },
+                        "wordCount": 957,
+                        "commentCount": 0,
+                        "image": {
+                            "@id": "https://www.fluentcpp.com/2022/06/05/design-patterns-vs-design-principles-factory-method/#primaryimage"
+                        },
+                        "thumbnailUrl": "https://www.fluentcpp.com/wp-content/uploads/2019/05/design_patterns_book.jpg",
+                        "keywords": [
+                            "C++",
+                            "design",
+                            "design pattern",
+                            "factory",
+                            "factory method",
+                            "GoF",
+                            "grasp"
+                        ],
+                        "articleSection": [
+                            "Expressive code"
+                        ],
+                        "inLanguage": "en-US",
+                        "potentialAction": [
+                            {
+                                "@type": "CommentAction",
+                                "name": "Comment",
+                                "target": [
+                                    "https://www.fluentcpp.com/2022/06/05/design-patterns-vs-design-principles-factory-method/#respond"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "@type": "WebPage",
+                        "@id": "https://www.fluentcpp.com/2022/06/05/design-patterns-vs-design-principles-factory-method/",
+                        "url": "https://www.fluentcpp.com/2022/06/05/design-patterns-vs-design-principles-factory-method/",
+                        "name": "Design Patterns VS Design Principles: Factory method - Fluent C++",
+                        "isPartOf": {
+                            "@id": "https://www.fluentcpp.com/#website"
+                        },
+                        "primaryImageOfPage": {
+                            "@id": "https://www.fluentcpp.com/2022/06/05/design-patterns-vs-design-principles-factory-method/#primaryimage"
+                        },
+                        "image": {
+                            "@id": "https://www.fluentcpp.com/2022/06/05/design-patterns-vs-design-principles-factory-method/#primaryimage"
+                        },
+                        "thumbnailUrl": "https://www.fluentcpp.com/wp-content/uploads/2019/05/design_patterns_book.jpg",
+                        "datePublished": "2022-06-05T01:00:49+00:00",
+                        "author": {
+                            "@id": "https://www.fluentcpp.com/#/schema/person/bc2586443e40d356676d1b1740521237"
+                        },
+                        "description": "In this episode of our series ond design patterns and design principles, we examine the Factory method design pattern and relate it to two design principles",
+                        "breadcrumb": {
+                            "@id": "https://www.fluentcpp.com/2022/06/05/design-patterns-vs-design-principles-factory-method/#breadcrumb"
+                        },
+                        "inLanguage": "en-US",
+                        "potentialAction": [
+                            {
+                                "@type": "ReadAction",
+                                "target": [
+                                    "https://www.fluentcpp.com/2022/06/05/design-patterns-vs-design-principles-factory-method/"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "@type": "ImageObject",
+                        "inLanguage": "en-US",
+                        "@id": "https://www.fluentcpp.com/2022/06/05/design-patterns-vs-design-principles-factory-method/#primaryimage",
+                        "url": "https://i0.wp.com/www.fluentcpp.com/wp-content/uploads/2019/05/design_patterns_book.jpg?fit=400%2C503&ssl=1",
+                        "contentUrl": "https://i0.wp.com/www.fluentcpp.com/wp-content/uploads/2019/05/design_patterns_book.jpg?fit=400%2C503&ssl=1",
+                        "width": 400,
+                        "height": 503,
+                        "caption": "design patterns book GoF"
+                    },
+                    {
+                        "@type": "BreadcrumbList",
+                        "@id": "https://www.fluentcpp.com/2022/06/05/design-patterns-vs-design-principles-factory-method/#breadcrumb",
+                        "itemListElement": [
+                            {
+                                "@type": "ListItem",
+                                "position": 1,
+                                "name": "Home",
+                                "item": "https://www.fluentcpp.com/"
+                            },
+                            {
+                                "@type": "ListItem",
+                                "position": 2,
+                                "name": "Design Patterns VS Design Principles: Factory method"
+                            }
+                        ]
+                    },
+                    {
+                        "@type": "WebSite",
+                        "@id": "https://www.fluentcpp.com/#website",
+                        "url": "https://www.fluentcpp.com/",
+                        "name": "Fluent C++",
+                        "description": "Jonathan Boccara&#039;s blog",
+                        "potentialAction": [
+                            {
+                                "@type": "SearchAction",
+                                "target": {
+                                    "@type": "EntryPoint",
+                                    "urlTemplate": "https://www.fluentcpp.com/?s={search_term_string}"
+                                },
+                                "query-input": {
+                                    "@type": "PropertyValueSpecification",
+                                    "valueRequired": true,
+                                    "valueName": "search_term_string"
+                                }
+                            }
+                        ],
+                        "inLanguage": "en-US"
+                    },
+                    {
+                        "@type": "Person",
+                        "@id": "https://www.fluentcpp.com/#/schema/person/bc2586443e40d356676d1b1740521237",
+                        "name": "Jonathan Boccara",
+                        "image": {
+                            "@type": "ImageObject",
+                            "inLanguage": "en-US",
+                            "@id": "https://www.fluentcpp.com/#/schema/person/image/",
+                            "url": "https://secure.gravatar.com/avatar/cf2136ea15306047a4aa549b5400deb87e750440abe9f5fab5ea5d8b47349d27?s=96&d=mm&r=g",
+                            "contentUrl": "https://secure.gravatar.com/avatar/cf2136ea15306047a4aa549b5400deb87e750440abe9f5fab5ea5d8b47349d27?s=96&d=mm&r=g",
+                            "caption": "Jonathan Boccara"
+                        },
+                        "description": "Hello, my name is Jonathan Boccara, I'm your host on Fluent C++. I have been a developer for 14 years. My focus is on how to write expressive code. I wrote the book The Legacy Code Programmer's Toolbox. I'm happy to take your feedback, don't hesitate to drop a comment on a post, follow me or get in touch directly !",
+                        "sameAs": [
+                            "https://www.linkedin.com/in/jonathan-boccara-23826921/",
+                            "https://x.com/joboccara"
+                        ]
+                    }
+                ]
+            }
+        },
+        "jetpack_featured_media_url": "",
+        "jetpack_sharing_enabled": true,
+        "_links": {
+            "self": [
+                {
+                    "href": "https://www.fluentcpp.com/wp-json/wp/v2/posts/5982",
+                    "targetHints": {
+                        "allow": [
+                            "GET"
+                        ]
+                    }
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://www.fluentcpp.com/wp-json/wp/v2/posts"
+                }
+            ],
+            "about": [
+                {
+                    "href": "https://www.fluentcpp.com/wp-json/wp/v2/types/post"
+                }
+            ],
+            "author": [
+                {
+                    "embeddable": true,
+                    "href": "https://www.fluentcpp.com/wp-json/wp/v2/users/1"
+                }
+            ],
+            "replies": [
+                {
+                    "embeddable": true,
+                    "href": "https://www.fluentcpp.com/wp-json/wp/v2/comments?post=5982"
+                }
+            ],
+            "version-history": [
+                {
+                    "count": 5,
+                    "href": "https://www.fluentcpp.com/wp-json/wp/v2/posts/5982/revisions"
+                }
+            ],
+            "predecessor-version": [
+                {
+                    "id": 6320,
+                    "href": "https://www.fluentcpp.com/wp-json/wp/v2/posts/5982/revisions/6320"
+                }
+            ],
+            "wp:attachment": [
+                {
+                    "href": "https://www.fluentcpp.com/wp-json/wp/v2/media?parent=5982"
+                }
+            ],
+            "wp:term": [
+                {
+                    "taxonomy": "category",
+                    "embeddable": true,
+                    "href": "https://www.fluentcpp.com/wp-json/wp/v2/categories?post=5982"
+                },
+                {
+                    "taxonomy": "post_tag",
+                    "embeddable": true,
+                    "href": "https://www.fluentcpp.com/wp-json/wp/v2/tags?post=5982"
+                }
+            ],
+            "curies": [
+                {
+                    "name": "wp",
+                    "href": "https://api.w.org/{rel}",
+                    "templated": true
+                }
+            ]
+        }
+    }
+]

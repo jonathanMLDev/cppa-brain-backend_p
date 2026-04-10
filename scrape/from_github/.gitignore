@@ -1,0 +1,6 @@
+# Cloned repositories (large; regenerate with export_github_docs.py)
+raw/*/
+!raw/.gitkeep
+
+# Generated exports (regenerate as needed)
+export/

@@ -1,0 +1,12 @@
+# Core dependencies
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+lxml>=4.9.0
+
+# Utilities
+tqdm>=4.66.0  # Progress bars
+
+# Optional but recommended
+urllib3>=2.0.0  # HTTP client improvements
+certifi>=2023.0.0  # SSL certificates
+

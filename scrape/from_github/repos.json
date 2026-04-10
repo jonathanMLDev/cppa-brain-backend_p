@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "default_lang": "en",
+  "last_modified_mode": "git",
+  "min_content_length": 50,
+  "repos": [
+    {
+      "repo": "microsoft/vscode-docs",
+      "ref": "main",
+      "slug": "vscode-docs",
+      "doc_roots": ["docs"],
+      "include_globs": ["**/*.md"],
+      "exclude_globs": ["**/node_modules/**", "**/.git/**"],
+      "content_keywords": [],
+      "tags": { "category": "vscode" },
+      "max_files": null
+    },
+    {
+      "repo": "MicrosoftDocs/visualstudio-docs",
+      "ref": "main",
+      "slug": "visualstudio-docs",
+      "doc_roots": ["docs"],
+      "include_globs": ["**/*.md"],
+      "exclude_globs": ["**/node_modules/**", "**/.git/**"],
+      "content_keywords": [],
+      "tags": { "category": "visualstudio" },
+      "max_files": null
+    },
+    {
+      "repo": "llvm/llvm-project",
+      "ref": "main",
+      "slug": "llvm-project",
+      "doc_roots": ["clang/docs"],
+      "include_globs": ["**/*.rst"],
+      "exclude_globs": ["**/.git/**", "**/_build/**"],
+      "content_keywords": [],
+      "tags": { "category": "clang", "doc_format": "rst" },
+      "max_files": null,
+      "sparse_paths": ["clang/docs"]
+    },
+    {
+      "repo": "conan-io/docs",
+      "ref": "develop2",
+      "slug": "conan-docs",
+      "doc_roots": [],
+      "include_globs": ["**/*.rst"],
+      "exclude_globs": ["**/.git/**", "**/_build/**"],
+      "content_keywords": [],
+      "tags": { "category": "conan", "doc_format": "rst" },
+      "max_files": null,
+      "sparse_paths": []
+    },
+    {
+      "repo": "MicrosoftDocs/vcpkg-docs",
+      "ref": "main",
+      "slug": "vcpkg-docs",
+      "doc_roots": [],
+      "include_globs": ["**/*.md"],
+      "exclude_globs": ["**/.git/**", "**/_build/**"],
+      "content_keywords": [],
+      "tags": { "category": "vcpkg", "doc_format": "md" },
+      "max_files": null,
+      "sparse_paths": []
+    },
+    {
+      "repo": "github/docs",
+      "ref": "main",
+      "slug": "github-actions-docs",
+      "doc_roots": ["content/actions"],
+      "include_globs": ["**/*.md"],
+      "exclude_globs": ["**/.git/**", "**/_build/**"],
+      "content_keywords": [],
+      "tags": { "category": "github-actions", "doc_format": "md" },
+      "max_files": null,
+      "sparse_paths": []
+    },
+    {
+      "repo": "fossas/fossa-cli",
+      "ref": "master",
+      "slug": "fossa-cli-docs",
+      "doc_roots": ["docs"],
+      "include_globs": ["**/*.md"],
+      "exclude_globs": ["**/.git/**", "**/_build/**"],
+      "content_keywords": [],
+      "tags": { "category": "fossa-cli", "doc_format": "md" },
+      "max_files": null,
+      "sparse_paths": []
+    }
+  ]
+}
